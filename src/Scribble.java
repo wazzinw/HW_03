@@ -1,29 +1,11 @@
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.*;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 public class Scribble {
-  
-	
 	
 	public static void main(String[] args) {
     
@@ -32,26 +14,29 @@ public class Scribble {
     frame.add(drawPad, BorderLayout.CENTER);
     
     JPanel a = new JPanel(new GridLayout(1,2,0,0));
+    TitledBorder border = new TitledBorder("Colors and Sizes");
+    a.setBorder(border);
     JPanel scroll = new JPanel(new GridLayout(3,2,1,1));
-    JPanel button = new JPanel(new GridLayout(2,1,1,1));
-    JPanel colorView = new JPanel();
+    JPanel button = new JPanel(new BorderLayout());
+    //JPanel colorView = new JPanel();
+    
     JButton clearButton = new JButton("Clear");
     
-    JSlider size = new JSlider(JSlider.HORIZONTAL,0,30,2);
-    JSlider r = new JSlider(JSlider.HORIZONTAL, 0, 255, 0);
+    JSlider size = new JSlider(JSlider.HORIZONTAL,0,50,2);
+    JSlider r = new JSlider(JSlider.HORIZONTAL, 0, 255, 5);
 	JSlider g = new JSlider(JSlider.HORIZONTAL, 0, 255, 0);
 	JSlider b = new JSlider(JSlider.HORIZONTAL, 0, 255, 0);
 	
 	size.setMajorTickSpacing(10);
 	size.setMinorTickSpacing(1);
-	 size.setPaintTicks(true);
-     size.setPaintLabels(true);
+	size.setPaintTicks(true);
+    size.setPaintLabels(true);
      
 	final JLabel rLabel = new JLabel("R = 0");
     final JLabel gLabel = new JLabel("G = 0");
     final JLabel bLabel = new JLabel("B = 0");
+   
     
-    colorView.setBackground(new Color(drawPad.rVal,drawPad.gVal,drawPad.bVal));
 	r.addChangeListener(new ChangeListener() {
 	      public void stateChanged(ChangeEvent e) {
 	        JSlider source = (JSlider) e.getSource();
@@ -94,22 +79,30 @@ public class Scribble {
         drawPad.clear();
       }
     });
-    button.add(size);
+    
+	
+	
+	//button.add(sizeLabel,BorderLayout.EAST);
+	
+	//button.add(colorView);
 	button.add(clearButton);
+	button.add(size,BorderLayout.SOUTH);
     scroll.add(r);scroll.add(rLabel);
-	scroll.add(g);scroll.add(gLabel);
-	scroll.add(b);scroll.add(bLabel);
+    scroll.add(g);scroll.add(gLabel);
+    scroll.add(b);scroll.add(bLabel);
+	
 	a.add(scroll);
 	a.add(button);
-	button.add(colorView);
-	
-	
 	
 	frame.add(a, BorderLayout.SOUTH);
     //frame.add(button,BorderLayout.EAST);
 	frame.setSize(600, 600);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
+    //colorView.setBackground(new Color(drawPad.rVal,drawPad.gVal,drawPad.bVal));
+   // drawPad.repaint();
     frame.setVisible(true);
+    
   }
 
 
@@ -149,6 +142,7 @@ public class Scribble {
 	public void paintComponent(Graphics g) {
         if (image == null) {
           image = createImage(getSize().width, getSize().height);
+          //g.fillOval(20, 40, 50, 50);
           graphics2D = (Graphics2D) image.getGraphics();
           graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
               RenderingHints.VALUE_ANTIALIAS_ON);
